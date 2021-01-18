@@ -2,7 +2,6 @@ import { ParseCSV } from '../../domain/usecases/parse-csv'
 import { Controller } from '../contracts/controller'
 import { HttpRequest, HttpResponse } from '../contracts/http'
 import { MissingFieldError } from '../errors/missing-field.error'
-import { ServerError } from '../errors/server.error'
 import { badRequest, serverError } from '../helpers/http.helper'
 export class UploadMailingController implements Controller {
   private readonly fields = ['header', 'delimiter']
@@ -17,7 +16,7 @@ export class UploadMailingController implements Controller {
       const { header, delimiter } = body
       this.parserCSV.parseFile(file.path, { headers: header, delimiter })
     } catch (error) {
-      return serverError(new ServerError())
+      return serverError()
     }
   }
 }
