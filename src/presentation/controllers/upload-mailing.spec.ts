@@ -21,16 +21,29 @@ describe('Upload Mailing Controller', () => {
 
     return new ParseCSVStub()
   }
+  interface SutTypes {
+    sut: UploadMailingController
+    parseCSVStub: ParseCSV
+  }
+  const makeSut = (): SutTypes => {
+    const parseCSVStub = makeParseCSV()
+    const sut = new UploadMailingController(parseCSVStub)
+    return {
+      sut,
+      parseCSVStub
+    }
+  }
   test('Should return an 400 if no delimiter is provided', () => {
-    const parserCSV = makeParseCSV()
-    const sut = new UploadMailingController(parserCSV)
+    const { sut } = makeSut()
     const httpRequest = {
       body: {
         header: {
           defaultHeader: 'designed_header'
         }
       },
-      file: 'file_content'
+      file: {
+        path: 'valid_path'
+      }
     }
     const httpResponse = sut.handle(httpRequest)
     expect(httpResponse.statusCode).toBe(400)
@@ -38,13 +51,14 @@ describe('Upload Mailing Controller', () => {
   })
 
   test('Should return an 400 if no header is provided', () => {
-    const parserCSV = makeParseCSV()
-    const sut = new UploadMailingController(parserCSV)
+    const { sut } = makeSut()
     const httpRequest = {
       body: {
         delimiter: 'valid_delimiter'
       },
-      file: 'file_content'
+      file: {
+        path: 'valid_path'
+      }
     }
     const httpResponse = sut.handle(httpRequest)
     expect(httpResponse.statusCode).toBe(400)
@@ -52,8 +66,7 @@ describe('Upload Mailing Controller', () => {
   })
 
   test('Should return an 400 if no file is provided', () => {
-    const parserCSV = makeParseCSV()
-    const sut = new UploadMailingController(parserCSV)
+    const { sut } = makeSut()
     const httpRequest = {
       body: {
         delimiter: 'valid_delimiter',
@@ -68,9 +81,8 @@ describe('Upload Mailing Controller', () => {
   })
 
   test('Should return an 500 if csvParser throws', () => {
-    const parserCSV = makeParseCSV()
-    const sut = new UploadMailingController(parserCSV)
-    jest.spyOn(parserCSV, 'parseFile').mockImplementation((): MailingModel => {
+    const { sut, parseCSVStub } = makeSut()
+    jest.spyOn(parseCSVStub, 'parseFile').mockImplementation((): MailingModel => {
       throw new ServerError()
     })
     const httpRequest = {
@@ -80,7 +92,9 @@ describe('Upload Mailing Controller', () => {
           defaultHeader: 'designed_header'
         }
       },
-      file: 'file_content'
+      file: {
+        path: 'valid_path'
+      }
     }
     const httpResponse = sut.handle(httpRequest)
     expect(httpResponse.statusCode).toBe(500)
