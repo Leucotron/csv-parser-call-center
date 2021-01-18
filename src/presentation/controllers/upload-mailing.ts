@@ -14,5 +14,11 @@ export class UploadMailingController implements Controller {
         body: new Error('Field header should be provided')
       }
     }
+    if (!httpRequest.file) {
+      return {
+        statusCode: 400,
+        body: new Error('Field file should be provided')
+      }
+    }
   }
 }
