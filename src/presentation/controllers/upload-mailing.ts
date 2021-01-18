@@ -5,19 +5,17 @@ import { MissingFieldError } from '../errors/missing-field.error'
 import { ServerError } from '../errors/server.error'
 import { badRequest, serverError } from '../helpers/http.helper'
 export class UploadMailingController implements Controller {
+  private readonly fields = ['header', 'delimiter']
   constructor (private readonly parserCSV: ParseCSV) {}
   handle (httpRequest: HttpRequest): HttpResponse {
     try {
-      if (!httpRequest.body.delimiter) {
-        return badRequest(new MissingFieldError('delimiter'))
+      const { body, file } = httpRequest
+      for (const field of this.fields) {
+        if (!body[field]) return badRequest(new MissingFieldError(field))
       }
-      if (!httpRequest.body.header) {
-        return badRequest(new MissingFieldError('header'))
-      }
-      if (!httpRequest.file) {
-        return badRequest(new MissingFieldError('file'))
-      }
-      this.parserCSV.parseFile(httpRequest.file.path, { headers: httpRequest.body.header, delimiter: httpRequest.body.delimiter })
+      if (!file) return badRequest(new MissingFieldError('file'))
+      const { header, delimiter } = body
+      this.parserCSV.parseFile(file.path, { headers: header, delimiter })
     } catch (error) {
       return serverError(new ServerError())
     }
