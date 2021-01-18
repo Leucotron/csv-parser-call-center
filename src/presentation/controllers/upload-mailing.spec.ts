@@ -100,4 +100,27 @@ describe('Upload Mailing Controller', () => {
     expect(httpResponse.statusCode).toBe(500)
     expect(httpResponse.body).toEqual(new ServerError())
   })
+
+  test('Should calls ParseCSV with correct params', () => {
+    const { sut, parseCSVStub } = makeSut()
+    const spyParseFile = jest.spyOn(parseCSVStub, 'parseFile')
+    const httpRequest = {
+      body: {
+        delimiter: 'valid_delimiter',
+        header: {
+          defaultHeader: 'designed_header'
+        }
+      },
+      file: {
+        path: 'valid_path'
+      }
+    }
+    sut.handle(httpRequest)
+    expect(spyParseFile).toHaveBeenCalledWith('valid_path', {
+      delimiter: 'valid_delimiter',
+      headers: {
+        defaultHeader: 'designed_header'
+      }
+    })
+  })
 })
