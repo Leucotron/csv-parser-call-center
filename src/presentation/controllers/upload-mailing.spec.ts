@@ -123,4 +123,28 @@ describe('Upload Mailing Controller', () => {
       }
     })
   })
+
+  test('Should return an 201 on success', () => {
+    const { sut } = makeSut()
+    const httpRequest = {
+      body: {
+        delimiter: 'valid_delimiter',
+        header: {
+          defaultHeader: 'designed_header'
+        }
+      },
+      file: {
+        path: 'valid_path'
+      }
+    }
+    const httpResponse = sut.handle(httpRequest)
+    expect(httpResponse.statusCode).toBe(201)
+    expect(httpResponse.body).toEqual({
+      email: 'valid_mail@email.com',
+      name: 'valid_name',
+      phones: [
+        'valid_phone'
+      ]
+    })
+  })
 })
