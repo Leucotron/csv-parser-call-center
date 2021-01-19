@@ -95,6 +95,24 @@ describe('Upload Mailing Controller', () => {
     expect(httpResponse.body).toEqual(new MissingFieldError('file'))
   })
 
+  test('Should return an 400 if no campaignId is provided', () => {
+    const { sut } = makeSut()
+    const httpRequest = {
+      body: {
+        delimiter: 'valid_delimiter',
+        header: {
+          defaultHeader: 'designed_header'
+        }
+      },
+      file: {
+        path: 'valid_path'
+      }
+    }
+    const httpResponse = sut.handle(httpRequest)
+    expect(httpResponse.statusCode).toBe(400)
+    expect(httpResponse.body).toEqual(new MissingFieldError('campaignId'))
+  })
+
   test('Should return an 500 if csvParser throws', () => {
     const { sut, addMailingStub } = makeSut()
     jest.spyOn(addMailingStub, 'add').mockImplementation((): MailingModel[] => {
