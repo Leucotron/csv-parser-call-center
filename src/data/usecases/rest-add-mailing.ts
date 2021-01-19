@@ -9,7 +9,7 @@ export class RestAddMailing implements AddMailing {
   async add (mailing: AddMailingModel): Promise<MailingModel[]> {
     const { path, delimiter, headers } = mailing
     const mailings = this.parser.parse(path, { delimiter, headers: bindHeaders(headers) })
-    await this.postAddMailing.post('any_path', mailings)
-    return mailings
+    const response = await this.postAddMailing.post('any_path', mailings)
+    return response.status === 201 ? mailings : null
   }
 }
