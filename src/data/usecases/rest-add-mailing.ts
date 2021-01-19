@@ -7,7 +7,7 @@ export class RestAddMailing implements AddMailing {
   constructor (private readonly parser: Parser) {}
   add (mailing: AddMailingModel): MailingModel[] {
     const { path, delimiter, headers } = mailing
-    this.parser.parse(path, { delimiter, headers: bindHeaders(headers) })
-    return null
+    const mailings = this.parser.parse(path, { delimiter, headers: bindHeaders(headers) })
+    return mailings
   }
 }
