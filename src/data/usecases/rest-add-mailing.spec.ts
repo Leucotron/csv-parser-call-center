@@ -21,9 +21,7 @@ describe('Rest Add Mailing', () => {
     })
     expect(parseSpy).toHaveBeenCalledWith('any_path', {
       delimiter: 'any_delimiter',
-      headers: {
-        defaultHeader: 'designed_header'
-      }
+      headers: ['designed_header']
     })
   })
 })
