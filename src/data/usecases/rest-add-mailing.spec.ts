@@ -73,23 +73,20 @@ describe('Rest Add Mailing', () => {
     })
   })
 
-  test('Should throw if Parser throws', () => {
+  test('Should throw if Parser throws', async () => {
     const { parserStub, sut } = makeSut()
     jest.spyOn(parserStub, 'parse').mockImplementation((): MailingModel[] => {
       throw new Error()
     })
-    try {
-      sut.add({
-        campaignId: 1,
-        delimiter: 'any_delimiter',
-        headers: {
-          defaultHeader: 'designed_header'
-        },
-        path: 'any_path'
-      })
-    } catch (error) {
-      expect(error).toEqual(new Error())
-    }
+    const promise = sut.add({
+      campaignId: 1,
+      delimiter: 'any_delimiter',
+      headers: {
+        defaultHeader: 'designed_header'
+      },
+      path: 'any_path'
+    })
+    expect(promise).rejects.toThrow()
   })
 
   test('Should call PostAddMailing with correct params', () => {

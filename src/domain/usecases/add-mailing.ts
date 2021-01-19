@@ -8,5 +8,5 @@ export interface AddMailingModel {
 }
 
 export interface AddMailing {
-  add: (mailing: AddMailingModel) => MailingModel[]
+  add: (mailing: AddMailingModel) => Promise<MailingModel[]>
 }
