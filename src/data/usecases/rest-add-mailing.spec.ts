@@ -38,4 +38,23 @@ describe('Rest Add Mailing', () => {
       headers: ['designed_header']
     })
   })
+
+  test('Should throw if Parser throws', () => {
+    const { parserStub, sut } = makeSut()
+    jest.spyOn(parserStub, 'parse').mockImplementation((): MailingModel[] => {
+      throw new Error()
+    })
+    try {
+      sut.add({
+        campaignId: 1,
+        delimiter: 'any_delimiter',
+        headers: {
+          defaultHeader: 'designed_header'
+        },
+        path: 'any_path'
+      })
+    } catch (error) {
+      expect(error).toEqual(new Error())
+    }
+  })
 })
