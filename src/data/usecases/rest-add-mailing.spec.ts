@@ -2,7 +2,7 @@ import { MailingModel } from '../../domain/models/mailing'
 import { Parser } from '../contracts/parser'
 import { RestAddMailing } from './rest-add-mailing'
 describe('Rest Add Mailing', () => {
-  const makeParserSut = (): Parser => {
+  const makeParserStub = (): Parser => {
     class ParserStub implements Parser {
       parse (): MailingModel[] {
         return null
@@ -10,9 +10,20 @@ describe('Rest Add Mailing', () => {
     }
     return new ParserStub()
   }
-  test('Should call Parser with correct params', () => {
-    const parserStub = makeParserSut()
+  interface SutTypes {
+    sut: RestAddMailing
+    parserStub: Parser
+  }
+  const makeSut = (): SutTypes => {
+    const parserStub = makeParserStub()
     const sut = new RestAddMailing(parserStub)
+    return {
+      sut,
+      parserStub
+    }
+  }
+  test('Should call Parser with correct params', () => {
+    const { parserStub, sut } = makeSut()
     const parseSpy = jest.spyOn(parserStub, 'parse')
     sut.add({
       campaignId: 1,
