@@ -1,6 +1,6 @@
 import { MailingModel } from '../../domain/models/mailing'
 import { Parser } from '../contracts/parser'
-import { PostAddMailing } from '../contracts/post-add-mailing'
+import { PostAddMailing, Response } from '../contracts/post-add-mailing'
 import { RestAddMailing } from './rest-add-mailing'
 describe('Rest Add Mailing', () => {
   const makeParserStub = (): Parser => {
@@ -34,8 +34,12 @@ describe('Rest Add Mailing', () => {
 
   const makePostAddMailingStub = (): PostAddMailing => {
     class PostAddMailingStub implements PostAddMailing {
-      async post (url: string, body: MailingModel[]): Promise<any> {
-        return new Promise(resolve => resolve(null))
+      async post (url: string, body: MailingModel[]): Promise<Response> {
+        return new Promise(resolve => resolve({
+          data: 'valid_data',
+          status: 201,
+          statusText: 'Created'
+        }))
       }
     }
     return new PostAddMailingStub()
@@ -135,5 +139,39 @@ describe('Rest Add Mailing', () => {
       path: 'any_path'
     })
     expect(promise).rejects.toThrow()
+  })
+
+  test('Should return an list Mailing on success', async () => {
+    const { sut } = makeSut()
+    const mailingData = {
+      campaignId: 1,
+      delimiter: 'any_delimiter',
+      headers: {
+        defaultHeader: 'designed_header'
+      },
+      path: 'any_path'
+    }
+    const mailings = await sut.add(mailingData)
+    expect(mailings).toEqual([
+      {
+        campaignId: 'any_id',
+        cnpj: 'any_cnpj',
+        contactCode: 'any_contact_code',
+        responsibleContact: 'any_responsibleContact',
+        name: 'any_name',
+        cpf: 'any_cpf',
+        email: 'any_email@mail.com',
+        address: {
+          cep: 'any_cep',
+          city: 'any_city',
+          complement: 'any_complement',
+          country: 'any_country',
+          neighborhood: 'any_neighborhood',
+          number: 123,
+          state: 'any_state',
+          street: 'any_street'
+        }
+      }
+    ])
   })
 })
