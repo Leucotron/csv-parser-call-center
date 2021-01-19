@@ -122,4 +122,18 @@ describe('Rest Add Mailing', () => {
       }
     ])
   })
+
+  test('Should throw if PostAddMailing throws', async () => {
+    const { postAddMailingStub, sut } = makeSut()
+    jest.spyOn(postAddMailingStub, 'post').mockReturnValueOnce(new Promise((resolve, reject) => reject(new Error())))
+    const promise = sut.add({
+      campaignId: 1,
+      delimiter: 'any_delimiter',
+      headers: {
+        defaultHeader: 'designed_header'
+      },
+      path: 'any_path'
+    })
+    expect(promise).rejects.toThrow()
+  })
 })
