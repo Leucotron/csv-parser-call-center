@@ -4,9 +4,9 @@ import { bindHeaders } from '../../helpers/header.helper'
 export class RestAddMailing implements AddMailing {
   constructor (private readonly parser: Parser, private readonly postAddMailing: PostAddMailing) {}
   async add (mailing: AddMailingModel): Promise<MailingModel[]> {
-    const { path, delimiter, headers } = mailing
+    const { path, delimiter, headers, campaignId } = mailing
     const mailings = await this.parser.parse(path, { delimiter, headers: bindHeaders(headers) })
-    await this.postAddMailing.post('any_path', mailings)
+    await this.postAddMailing.post('any_path', { campaignId, mailings })
     return mailings
   }
 }

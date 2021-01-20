@@ -9,10 +9,7 @@ describe('Upload Mailing Controller', () => {
       async add (mailing: AddMailingModel): Promise<MailingModel[]> {
         return [
           {
-            campaignId: 'any_id',
             cnpj: 'any_cnpj',
-            contactCode: 'any_contact_code',
-            responsibleContact: 'any_responsibleContact',
             name: 'any_name',
             cpf: 'any_cpf',
             email: 'any_email@mail.com',
@@ -179,10 +176,7 @@ describe('Upload Mailing Controller', () => {
     expect(httpResponse.statusCode).toBe(201)
     expect(httpResponse.body).toEqual([
       {
-        campaignId: 'any_id',
         cnpj: 'any_cnpj',
-        contactCode: 'any_contact_code',
-        responsibleContact: 'any_responsibleContact',
         name: 'any_name',
         cpf: 'any_cpf',
         email: 'any_email@mail.com',

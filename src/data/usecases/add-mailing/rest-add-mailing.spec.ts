@@ -1,15 +1,13 @@
 import { PostAddMailing, Parser, MailingModel, Response } from './rest-add-mailing-contracts'
 import { RestAddMailing } from './rest-add-mailing'
+import { PostMailingModel } from 'src/data/contracts/post-add-mailing'
 describe('Rest Add Mailing', () => {
   const makeParserStub = (): Parser => {
     class ParserStub implements Parser {
       async parse (): Promise<MailingModel[]> {
-        const mailings = [
+        const mailings: MailingModel[] = [
           {
-            campaignId: 'any_id',
             cnpj: 'any_cnpj',
-            contactCode: 'any_contact_code',
-            responsibleContact: 'any_responsibleContact',
             name: 'any_name',
             cpf: 'any_cpf',
             email: 'any_email@mail.com',
@@ -34,7 +32,7 @@ describe('Rest Add Mailing', () => {
 
   const makePostAddMailingStub = (): PostAddMailing => {
     class PostAddMailingStub implements PostAddMailing {
-      async post (url: string, body: MailingModel[]): Promise<Response> {
+      async post (url: string, body: PostMailingModel): Promise<Response> {
         return new Promise(resolve => resolve({
           data: 'valid_data',
           status: 201,
@@ -104,28 +102,28 @@ describe('Rest Add Mailing', () => {
       },
       path: 'any_path'
     })
-    expect(postSpy).toHaveBeenCalledWith('any_path', [
-      {
-        campaignId: 'any_id',
-        cnpj: 'any_cnpj',
-        contactCode: 'any_contact_code',
-        responsibleContact: 'any_responsibleContact',
-        name: 'any_name',
-        cpf: 'any_cpf',
-        email: 'any_email@mail.com',
-        address: {
-          cep: 'any_cep',
-          city: 'any_city',
-          complement: 'any_complement',
-          country: 'any_country',
-          neighborhood: 'any_neighborhood',
-          number: 123,
-          state: 'any_state',
-          street: 'any_street'
-        },
-        phones: ['any_phone']
-      }
-    ])
+    expect(postSpy).toHaveBeenCalledWith('any_path', {
+      campaignId: 1,
+      mailings: [
+        {
+          cnpj: 'any_cnpj',
+          name: 'any_name',
+          cpf: 'any_cpf',
+          email: 'any_email@mail.com',
+          address: {
+            cep: 'any_cep',
+            city: 'any_city',
+            complement: 'any_complement',
+            country: 'any_country',
+            neighborhood: 'any_neighborhood',
+            number: 123,
+            state: 'any_state',
+            street: 'any_street'
+          },
+          phones: ['any_phone']
+        }
+      ]
+    })
   })
 
   test('Should throw if PostAddMailing throws', async () => {
@@ -155,10 +153,7 @@ describe('Rest Add Mailing', () => {
     const mailings = await sut.add(mailingData)
     expect(mailings).toEqual([
       {
-        campaignId: 'any_id',
         cnpj: 'any_cnpj',
-        contactCode: 'any_contact_code',
-        responsibleContact: 'any_responsibleContact',
         name: 'any_name',
         cpf: 'any_cpf',
         email: 'any_email@mail.com',

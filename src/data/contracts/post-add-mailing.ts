@@ -6,6 +6,11 @@ export interface Response {
   statusText: string
 }
 
+export interface PostMailingModel {
+  campaignId: number
+  mailings: MailingModel[]
+}
+
 export interface PostAddMailing {
-  post: (url: string, body: MailingModel[]) => Promise<Response>
+  post: (url: string, body: PostMailingModel) => Promise<Response>
 }

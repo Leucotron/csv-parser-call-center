@@ -17,7 +17,4 @@ export interface MailingModel {
   email: string
   phones: string[]
   address: Address
-  responsibleContact: string
-  contactCode: string
-  campaignId: string
 }
