@@ -2,15 +2,15 @@ import { MailingModel } from '../../../domain/models/mailing'
 import { MailingRows } from '../contracts/mailing-rows'
 export const mapToMailing = (data: MailingRows): MailingModel => {
   const { nome, cpf, cnpj, email, endereco, numero, cep, cidade, complemento, pais, bairro, estado } = data
-  return {
+  const mailing: MailingModel = {
     name: nome,
-    cpf: cpf,
-    cnpj: cnpj,
-    email: email,
+    cpf,
+    cnpj,
+    email,
     address: {
       street: endereco,
       number: numero,
-      cep: cep,
+      cep,
       city: cidade,
       complement: complemento,
       country: pais,
@@ -19,6 +19,7 @@ export const mapToMailing = (data: MailingRows): MailingModel => {
     },
     phones: mapToMailingPhones(data)
   }
+  return mailing
 }
 
 export const mapToMailingPhones = (data: MailingRows): string[] => {
