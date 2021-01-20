@@ -38,9 +38,14 @@ jest.mock('fast-csv', () => ({
     return { transform }
   }
 }))
+
 describe('Fast CSV Adapter', () => {
+  const makeSut = (): FastCSVAdapter => {
+    return new FastCSVAdapter()
+  }
+
   test('Should calls parse with correct values', async () => {
-    const sut = new FastCSVAdapter()
+    const sut = makeSut()
     const parseSpy = jest.spyOn(sut, 'parse')
     await sut.parse('any_path', { delimiter: 'any_delimiter', headers: ['any_header'] })
     expect(parseSpy).toHaveBeenCalledWith('any_path',
@@ -52,7 +57,7 @@ describe('Fast CSV Adapter', () => {
   })
 
   test('Should calls fast-csv with correct values', async () => {
-    const sut = new FastCSVAdapter()
+    const sut = makeSut()
     const parseFileSpy = jest.spyOn(fc, 'parseFile')
     await sut.parse('any_path', { delimiter: 'any_delimiter', headers: ['any_header'] })
     expect(parseFileSpy).toHaveBeenCalledWith('any_path',
@@ -64,7 +69,7 @@ describe('Fast CSV Adapter', () => {
   })
 
   test('Should return a list of mailings on success', async () => {
-    const sut = new FastCSVAdapter()
+    const sut = makeSut()
     const mailings = await sut.parse('any_path', { delimiter: 'any_delimiter', headers: ['any_header'] })
     expect(mailings).toEqual(
       [
@@ -93,7 +98,7 @@ describe('Fast CSV Adapter', () => {
   })
 
   test('Should throw if fast-csv throws', async () => {
-    const sut = new FastCSVAdapter()
+    const sut = makeSut()
     jest.spyOn(fc, 'parseFile').mockImplementation(() => {
       throw new Error()
     })
