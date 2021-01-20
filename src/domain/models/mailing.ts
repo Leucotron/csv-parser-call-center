@@ -15,6 +15,7 @@ export interface MailingModel {
   cpf: string
   cnpj: string
   email: string
+  phones: string[]
   address: Address
   responsibleContact: string
   contactCode: string

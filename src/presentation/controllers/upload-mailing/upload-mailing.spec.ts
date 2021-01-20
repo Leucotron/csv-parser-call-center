@@ -25,7 +25,8 @@ describe('Upload Mailing Controller', () => {
               number: 123,
               state: 'any_state',
               street: 'any_street'
-            }
+            },
+            phones: ['any_phone']
           }
         ]
       }
@@ -194,7 +195,8 @@ describe('Upload Mailing Controller', () => {
           number: 123,
           state: 'any_state',
           street: 'any_street'
-        }
+        },
+        phones: ['any_phone']
       }
     ])
   })

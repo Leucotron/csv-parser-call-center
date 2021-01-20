@@ -1,9 +1,40 @@
 import { FastCSVAdapter } from './fast-csv-adapter'
 import fc from 'fast-csv'
+import EventEmitter from 'events'
+import { MailingModel } from 'src/domain/models/mailing'
 
+interface CsvParserStreamAdapter {
+  transform: () => EventEmitter
+}
 jest.mock('fast-csv', () => ({
-  parseFile (): fc.CsvParserStream<any, any> {
-    return null
+  parseFile (): CsvParserStreamAdapter {
+    const transform = (): EventEmitter => {
+      const data = new EventEmitter()
+      const mailing: MailingModel =
+        {
+          campaignId: 'any_id',
+          cnpj: 'any_cnpj',
+          contactCode: 'any_contact_code',
+          responsibleContact: 'any_responsibleContact',
+          name: 'any_name',
+          cpf: 'any_cpf',
+          email: 'any_email@mail.com',
+          address: {
+            cep: 'any_cep',
+            city: 'any_city',
+            complement: 'any_complement',
+            country: 'any_country',
+            neighborhood: 'any_neighborhood',
+            number: 123,
+            state: 'any_state',
+            street: 'any_street'
+          },
+          phones: ['any_phone']
+        }
+      data.emit('data', mailing)
+      return data
+    }
+    return { transform }
   }
 }))
 describe('Fast CSV Adapter', () => {

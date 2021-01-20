@@ -22,7 +22,8 @@ describe('Rest Add Mailing', () => {
               number: 123,
               state: 'any_state',
               street: 'any_street'
-            }
+            },
+            phones: ['any_phone']
           }
         ]
       }
@@ -120,7 +121,8 @@ describe('Rest Add Mailing', () => {
           number: 123,
           state: 'any_state',
           street: 'any_street'
-        }
+        },
+        phones: ['any_phone']
       }
     ])
   })
@@ -168,7 +170,8 @@ describe('Rest Add Mailing', () => {
           number: 123,
           state: 'any_state',
           street: 'any_street'
-        }
+        },
+        phones: ['any_phone']
       }
     ])
   })
