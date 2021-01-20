@@ -4,7 +4,12 @@ import axios from 'axios'
 
 jest.mock('axios', () => ({
   async post (url: string, body: any): Promise<Response> {
-    return new Promise(resolve => resolve(null))
+    const response: Response = {
+      data: 'valid_data',
+      status: 201,
+      statusText: 'Created'
+    }
+    return new Promise(resolve => resolve(response))
   }
 }))
 
@@ -12,9 +17,8 @@ describe('Mailing Rest API', () => {
   const makeSut = (): AxiosAdapter => {
     return new AxiosAdapter()
   }
-  test('Should throw if axios throws', async () => {
-    const sut = makeSut()
-    const postAddMailings: PostMailingModel = {
+  const makeFakePostMailingModel = (): PostMailingModel => {
+    return {
       campaignId: 1,
       mailings: [
         {
@@ -36,6 +40,11 @@ describe('Mailing Rest API', () => {
         }
       ]
     }
+  }
+
+  test('Should throw if axios throws', async () => {
+    const sut = makeSut()
+    const postAddMailings = makeFakePostMailingModel()
     jest.spyOn(axios, 'post').mockReturnValueOnce(new Promise((resolve, reject) => reject(new Error())))
     const promise = sut.post('valid_url', postAddMailings)
     await expect(promise).rejects.toThrow()
@@ -43,28 +52,7 @@ describe('Mailing Rest API', () => {
 
   test('Should calls axios.post with correct params', async () => {
     const sut = makeSut()
-    const postAddMailings: PostMailingModel = {
-      campaignId: 1,
-      mailings: [
-        {
-          cnpj: 'any_cnpj',
-          name: 'any_name',
-          cpf: 'any_cpf',
-          email: 'any_email@mail.com',
-          address: {
-            cep: 'any_cep',
-            city: 'any_city',
-            complement: 'any_complement',
-            country: 'any_country',
-            neighborhood: 'any_neighborhood',
-            number: 123,
-            state: 'any_state',
-            street: 'any_street'
-          },
-          phones: ['any_phone']
-        }
-      ]
-    }
+    const postAddMailings = makeFakePostMailingModel()
     const postSpy = jest.spyOn(axios, 'post')
     await sut.post('valid_url', postAddMailings)
     expect(postSpy).toHaveBeenCalledWith('valid_url', {
@@ -89,5 +77,14 @@ describe('Mailing Rest API', () => {
         }
       ]
     })
+  })
+
+  test('Should return created response on success', async () => {
+    const sut = makeSut()
+    const postAddMailings = makeFakePostMailingModel()
+    const response = await sut.post('valid_url', postAddMailings)
+    const { status, data } = response
+    expect(status).toBe(201)
+    expect(data).toBeTruthy()
   })
 })
