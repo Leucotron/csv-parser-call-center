@@ -1,13 +1,12 @@
 import { UploadMailingController } from './upload-mailing'
-import { MissingFieldError } from '../errors/missing-field.error'
-import { ServerError } from '../errors/server.error'
-import { MailingModel } from '../../domain/models/mailing'
-import { AddMailing, AddMailingModel } from '../../domain/usecases/add-mailing'
+import { MissingFieldError } from '../../errors/missing-field.error'
+import { ServerError } from '../../errors/server.error'
+import { MailingModel, AddMailing, AddMailingModel } from './upload-mailing-contracts'
 
 describe('Upload Mailing Controller', () => {
   const makeAddMailing = (): AddMailing => {
     class AddMailingStub implements AddMailing {
-      add (mailing: AddMailingModel): MailingModel[] {
+      async add (mailing: AddMailingModel): Promise<MailingModel[]> {
         return [
           {
             campaignId: 'any_id',
@@ -45,7 +44,7 @@ describe('Upload Mailing Controller', () => {
       addMailingStub: addMailingStub
     }
   }
-  test('Should return an 400 if no delimiter is provided', () => {
+  test('Should return an 400 if no delimiter is provided', async () => {
     const { sut } = makeSut()
     const httpRequest = {
       body: {
@@ -58,12 +57,12 @@ describe('Upload Mailing Controller', () => {
         path: 'valid_path'
       }
     }
-    const httpResponse = sut.handle(httpRequest)
+    const httpResponse = await sut.handle(httpRequest)
     expect(httpResponse.statusCode).toBe(400)
     expect(httpResponse.body).toEqual(new MissingFieldError('delimiter'))
   })
 
-  test('Should return an 400 if no header is provided', () => {
+  test('Should return an 400 if no header is provided', async () => {
     const { sut } = makeSut()
     const httpRequest = {
       body: {
@@ -74,12 +73,12 @@ describe('Upload Mailing Controller', () => {
         path: 'valid_path'
       }
     }
-    const httpResponse = sut.handle(httpRequest)
+    const httpResponse = await sut.handle(httpRequest)
     expect(httpResponse.statusCode).toBe(400)
     expect(httpResponse.body).toEqual(new MissingFieldError('header'))
   })
 
-  test('Should return an 400 if no file is provided', () => {
+  test('Should return an 400 if no file is provided', async () => {
     const { sut } = makeSut()
     const httpRequest = {
       body: {
@@ -90,12 +89,12 @@ describe('Upload Mailing Controller', () => {
         }
       }
     }
-    const httpResponse = sut.handle(httpRequest)
+    const httpResponse = await sut.handle(httpRequest)
     expect(httpResponse.statusCode).toBe(400)
     expect(httpResponse.body).toEqual(new MissingFieldError('file'))
   })
 
-  test('Should return an 400 if no campaignId is provided', () => {
+  test('Should return an 400 if no campaignId is provided', async () => {
     const { sut } = makeSut()
     const httpRequest = {
       body: {
@@ -108,14 +107,14 @@ describe('Upload Mailing Controller', () => {
         path: 'valid_path'
       }
     }
-    const httpResponse = sut.handle(httpRequest)
+    const httpResponse = await sut.handle(httpRequest)
     expect(httpResponse.statusCode).toBe(400)
     expect(httpResponse.body).toEqual(new MissingFieldError('campaignId'))
   })
 
-  test('Should return an 500 if csvParser throws', () => {
+  test('Should return an 500 if csvParser throws', async () => {
     const { sut, addMailingStub } = makeSut()
-    jest.spyOn(addMailingStub, 'add').mockImplementation((): MailingModel[] => {
+    jest.spyOn(addMailingStub, 'add').mockImplementation(async (): Promise<MailingModel[]> => {
       throw new ServerError()
     })
     const httpRequest = {
@@ -130,12 +129,12 @@ describe('Upload Mailing Controller', () => {
         path: 'valid_path'
       }
     }
-    const httpResponse = sut.handle(httpRequest)
+    const httpResponse = await sut.handle(httpRequest)
     expect(httpResponse.statusCode).toBe(500)
     expect(httpResponse.body).toEqual(new ServerError())
   })
 
-  test('Should calls AddMailing with correct params', () => {
+  test('Should calls AddMailing with correct params', async () => {
     const { sut, addMailingStub } = makeSut()
     const spyAdd = jest.spyOn(addMailingStub, 'add')
     const httpRequest = {
@@ -150,7 +149,7 @@ describe('Upload Mailing Controller', () => {
         path: 'valid_path'
       }
     }
-    sut.handle(httpRequest)
+    await sut.handle(httpRequest)
     expect(spyAdd).toHaveBeenCalledWith({
       delimiter: 'valid_delimiter',
       campaignId: 'valid_id',
@@ -161,7 +160,7 @@ describe('Upload Mailing Controller', () => {
     })
   })
 
-  test('Should return an 201 on success', () => {
+  test('Should return an 201 on success', async () => {
     const { sut } = makeSut()
     const httpRequest = {
       body: {
@@ -175,7 +174,7 @@ describe('Upload Mailing Controller', () => {
         path: 'valid_path'
       }
     }
-    const httpResponse = sut.handle(httpRequest)
+    const httpResponse = await sut.handle(httpRequest)
     expect(httpResponse.statusCode).toBe(201)
     expect(httpResponse.body).toEqual([
       {

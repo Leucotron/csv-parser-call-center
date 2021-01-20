@@ -1,6 +1,4 @@
-import { MailingModel } from '../../domain/models/mailing'
-import { Parser } from '../contracts/parser'
-import { PostAddMailing, Response } from '../contracts/post-add-mailing'
+import { PostAddMailing, Parser, MailingModel, Response } from './rest-add-mailing-contracts'
 import { RestAddMailing } from './rest-add-mailing'
 describe('Rest Add Mailing', () => {
   const makeParserStub = (): Parser => {
