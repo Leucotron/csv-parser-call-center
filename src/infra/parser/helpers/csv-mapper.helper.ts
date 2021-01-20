@@ -1,4 +1,4 @@
-import { MailingModel } from '../../domain/models/mailing'
+import { MailingModel } from '../../../domain/models/mailing'
 import { MailingRows } from '../contracts/mailing-rows'
 export const mapToMailing = (data: MailingRows): MailingModel => {
   const { nome, cpf, cnpj, email, endereco, numero, cep, cidade, complemento, pais, bairro, estado } = data

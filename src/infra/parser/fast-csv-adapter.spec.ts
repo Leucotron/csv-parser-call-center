@@ -1,7 +1,7 @@
 import { FastCSVAdapter } from './fast-csv-adapter'
 import fc from 'fast-csv'
 import EventEmitter from 'events'
-import { MailingRows } from '../contracts/mailing-rows'
+import { MailingRows } from './contracts/mailing-rows'
 import { MailingModel } from '../../domain/models/mailing'
 
 interface CsvParserStreamAdapter {
