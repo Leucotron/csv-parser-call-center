@@ -7,9 +7,13 @@ jest.mock('axios', () => ({
     return new Promise(resolve => resolve(null))
   }
 }))
+
 describe('Mailing Rest API', () => {
+  const makeSut = (): AxiosAdapter => {
+    return new AxiosAdapter()
+  }
   test('Should throw if axios throws', async () => {
-    const sut = new AxiosAdapter()
+    const sut = makeSut()
     const postAddMailings: PostMailingModel = {
       campaignId: 1,
       mailings: [
@@ -36,8 +40,9 @@ describe('Mailing Rest API', () => {
     const promise = sut.post('valid_url', postAddMailings)
     await expect(promise).rejects.toThrow()
   })
+
   test('Should calls axios.post with correct params', async () => {
-    const sut = new AxiosAdapter()
+    const sut = makeSut()
     const postAddMailings: PostMailingModel = {
       campaignId: 1,
       mailings: [
