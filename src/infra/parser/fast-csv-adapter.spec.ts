@@ -31,17 +31,18 @@ jest.mock('fast-csv', () => ({
           },
           phones: ['any_phone']
         }
-      data.emit('data', mailing)
+      setTimeout(() => { data.emit('data', mailing) }, 50)
+      setTimeout(() => { data.emit('end', 1) }, 100)
       return data
     }
     return { transform }
   }
 }))
 describe('Fast CSV Adapter', () => {
-  test('Should calls parse with correct values', () => {
+  test('Should calls parse with correct values', async () => {
     const sut = new FastCSVAdapter()
     const parseSpy = jest.spyOn(sut, 'parse')
-    sut.parse('any_path', { delimiter: 'any_delimiter', headers: ['any_header'] })
+    await sut.parse('any_path', { delimiter: 'any_delimiter', headers: ['any_header'] })
     expect(parseSpy).toHaveBeenCalledWith('any_path',
       {
         delimiter: 'any_delimiter',
@@ -50,15 +51,44 @@ describe('Fast CSV Adapter', () => {
     )
   })
 
-  test('Should calls fast csv with correct values', () => {
+  test('Should calls fast csv with correct values', async () => {
     const sut = new FastCSVAdapter()
     const parseFileSpy = jest.spyOn(fc, 'parseFile')
-    sut.parse('any_path', { delimiter: 'any_delimiter', headers: ['any_header'] })
+    await sut.parse('any_path', { delimiter: 'any_delimiter', headers: ['any_header'] })
     expect(parseFileSpy).toHaveBeenCalledWith('any_path',
       {
         delimiter: 'any_delimiter',
         headers: ['any_header']
       }
+    )
+  })
+
+  test('Should return a list of mailings on success', async () => {
+    const sut = new FastCSVAdapter()
+    const mailings = await sut.parse('any_path', { delimiter: 'any_delimiter', headers: ['any_header'] })
+    expect(mailings).toEqual(
+      [
+        {
+          campaignId: 'any_id',
+          cnpj: 'any_cnpj',
+          contactCode: 'any_contact_code',
+          responsibleContact: 'any_responsibleContact',
+          name: 'any_name',
+          cpf: 'any_cpf',
+          email: 'any_email@mail.com',
+          address: {
+            cep: 'any_cep',
+            city: 'any_city',
+            complement: 'any_complement',
+            country: 'any_country',
+            neighborhood: 'any_neighborhood',
+            number: 123,
+            state: 'any_state',
+            street: 'any_street'
+          },
+          phones: ['any_phone']
+        }
+      ]
     )
   })
 })

@@ -5,7 +5,7 @@ export class RestAddMailing implements AddMailing {
   constructor (private readonly parser: Parser, private readonly postAddMailing: PostAddMailing) {}
   async add (mailing: AddMailingModel): Promise<MailingModel[]> {
     const { path, delimiter, headers } = mailing
-    const mailings = this.parser.parse(path, { delimiter, headers: bindHeaders(headers) })
+    const mailings = await this.parser.parse(path, { delimiter, headers: bindHeaders(headers) })
     await this.postAddMailing.post('any_path', mailings)
     return mailings
   }

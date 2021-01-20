@@ -3,8 +3,8 @@ import { RestAddMailing } from './rest-add-mailing'
 describe('Rest Add Mailing', () => {
   const makeParserStub = (): Parser => {
     class ParserStub implements Parser {
-      parse (): MailingModel[] {
-        return [
+      async parse (): Promise<MailingModel[]> {
+        const mailings = [
           {
             campaignId: 'any_id',
             cnpj: 'any_cnpj',
@@ -26,6 +26,7 @@ describe('Rest Add Mailing', () => {
             phones: ['any_phone']
           }
         ]
+        return new Promise(resolve => resolve(mailings))
       }
     }
     return new ParserStub()
@@ -78,7 +79,7 @@ describe('Rest Add Mailing', () => {
 
   test('Should throw if Parser throws', async () => {
     const { parserStub, sut } = makeSut()
-    jest.spyOn(parserStub, 'parse').mockImplementation((): MailingModel[] => {
+    jest.spyOn(parserStub, 'parse').mockImplementation(async (): Promise<MailingModel[]> => {
       throw new Error()
     })
     const promise = sut.add({
@@ -92,10 +93,10 @@ describe('Rest Add Mailing', () => {
     expect(promise).rejects.toThrow()
   })
 
-  test('Should call PostAddMailing with correct params', () => {
+  test('Should call PostAddMailing with correct params', async () => {
     const { postAddMailingStub, sut } = makeSut()
     const postSpy = jest.spyOn(postAddMailingStub, 'post')
-    sut.add({
+    await sut.add({
       campaignId: 1,
       delimiter: 'any_delimiter',
       headers: {
