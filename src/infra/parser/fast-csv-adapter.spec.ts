@@ -51,7 +51,7 @@ describe('Fast CSV Adapter', () => {
     )
   })
 
-  test('Should calls fast csv with correct values', async () => {
+  test('Should calls fast-csv with correct values', async () => {
     const sut = new FastCSVAdapter()
     const parseFileSpy = jest.spyOn(fc, 'parseFile')
     await sut.parse('any_path', { delimiter: 'any_delimiter', headers: ['any_header'] })
@@ -90,5 +90,14 @@ describe('Fast CSV Adapter', () => {
         }
       ]
     )
+  })
+
+  test('Should throw if fast-csv throws', async () => {
+    const sut = new FastCSVAdapter()
+    jest.spyOn(fc, 'parseFile').mockImplementation(() => {
+      throw new Error()
+    })
+    const promise = sut.parse('any_path', { delimiter: 'any_delimiter', headers: ['any_header'] })
+    await expect(promise).rejects.toThrow()
   })
 })
