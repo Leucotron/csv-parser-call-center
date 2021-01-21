@@ -135,13 +135,14 @@ describe('Upload Mailing Controller', () => {
   test('Should calls AddMailing with correct params', async () => {
     const { sut, addMailingStub } = makeSut()
     const spyAdd = jest.spyOn(addMailingStub, 'add')
+    const header = JSON.stringify({
+      defaultHeader: 'designed_header'
+    })
     const httpRequest = {
       body: {
         delimiter: 'valid_delimiter',
         campaignId: 'valid_id',
-        header: {
-          defaultHeader: 'designed_header'
-        }
+        header
       },
       file: {
         path: 'valid_path'
@@ -160,13 +161,14 @@ describe('Upload Mailing Controller', () => {
 
   test('Should return an 201 on success', async () => {
     const { sut } = makeSut()
+    const header = JSON.stringify({
+      defaultHeader: 'designed_header'
+    })
     const httpRequest = {
       body: {
         delimiter: 'valid_delimiter',
         campaignId: 'valid_id',
-        header: {
-          defaultHeader: 'designed_header'
-        }
+        header
       },
       file: {
         path: 'valid_path'
