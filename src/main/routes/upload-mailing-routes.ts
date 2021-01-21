@@ -1,9 +1,9 @@
 import { Router } from 'express'
-import { adaptRoute } from '../adapters/express-route.adapter'
+import { adaptMulterRoute } from '../adapters/express-multer-route.adapter'
 import { makeUploadMailingController } from '../factories/upload-mailing'
 import multer from 'multer'
 
 export default (router: Router): void => {
   const upload = multer({ dest: 'uploads/' })
-  router.post('/upload', upload.single('mailing'), adaptRoute(makeUploadMailingController()))
+  router.post('/upload', upload.single('mailing'), adaptMulterRoute(makeUploadMailingController()))
 }
