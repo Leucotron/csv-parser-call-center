@@ -7,7 +7,7 @@ export class FastCSVAdapter implements Parser {
   async parse (path: string, opts: ParserOptionsArgs): Promise<MailingModel[]> {
     return new Promise((resolve, reject) => {
       const mailings = []
-      parseFile<MailingRows, MailingModel>(path, opts)
+      parseFile<MailingRows, MailingModel>(path, { ...opts, renameHeaders: true })
         .transform((data: MailingRows) => mapToMailing(data))
         .on('error', error => reject(error))
         .on('data', (row: MailingModel) => mailings.push(row))

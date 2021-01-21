@@ -12,9 +12,10 @@ export class UploadMailingController implements Controller {
       }
       if (!file) return badRequest(new MissingFieldError('file'))
       const { header, delimiter, campaignId } = body
-      const mailings = await this.addMailing.add({ campaignId, headers: header, delimiter, path: file.path })
+      const mailings = await this.addMailing.add({ campaignId, headers: typeof header === 'string' ? JSON.parse(header) : header, delimiter, path: file.path })
       return created<MailingModel[]>(mailings)
     } catch (error) {
+      console.error(error)
       return serverError()
     }
   }

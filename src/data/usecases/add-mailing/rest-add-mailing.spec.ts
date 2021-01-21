@@ -48,10 +48,11 @@ describe('Rest Add Mailing', () => {
     parserStub: Parser
     postAddMailingStub: PostAddMailing
   }
+  const url = 'http://valid_url/api/v1'
   const makeSut = (): SutTypes => {
     const parserStub = makeParserStub()
     const postAddMailingStub = makePostAddMailingStub()
-    const sut = new RestAddMailing(parserStub, postAddMailingStub)
+    const sut = new RestAddMailing(parserStub, postAddMailingStub, url)
     return {
       sut,
       parserStub,
@@ -71,7 +72,7 @@ describe('Rest Add Mailing', () => {
     })
     expect(parseSpy).toHaveBeenCalledWith('any_path', {
       delimiter: 'any_delimiter',
-      headers: ['designed_header']
+      headers: ['defaultHeader']
     })
   })
 
@@ -102,7 +103,7 @@ describe('Rest Add Mailing', () => {
       },
       path: 'any_path'
     })
-    expect(postSpy).toHaveBeenCalledWith('any_path', {
+    expect(postSpy).toHaveBeenCalledWith('http://valid_url/api/v1', {
       campaignId: 1,
       mailings: [
         {

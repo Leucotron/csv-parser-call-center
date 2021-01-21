@@ -55,11 +55,12 @@ describe('Fast CSV Adapter', () => {
   test('Should calls fast-csv with correct values', async () => {
     const sut = makeSut()
     const parseFileSpy = jest.spyOn(fc, 'parseFile')
-    await sut.parse('any_path', { delimiter: 'any_delimiter', headers: ['any_header'] })
+    await sut.parse('any_path', { delimiter: 'any_delimiter', headers: ['any_header'], renameHeaders: true })
     expect(parseFileSpy).toHaveBeenCalledWith('any_path',
       {
         delimiter: 'any_delimiter',
-        headers: ['any_header']
+        headers: ['any_header'],
+        renameHeaders: true
       }
     )
   })
