@@ -8,6 +8,7 @@ module.exports = {
   collectCoverageFrom: [
     '<rootDir>/src/**/*.ts',
     '!<rootDir>/src/**/*-contracts.ts',
+    '!<rootDir>/src/main/**',
     '!**/contracts/**'
   ],
   coverageDirectory: 'coverage',

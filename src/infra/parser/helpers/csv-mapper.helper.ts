@@ -1,5 +1,7 @@
+import { unlinkSync } from 'fs'
 import { MailingModel } from '../../../domain/models/mailing'
 import { MailingRows } from '../contracts/mailing-rows'
+
 export const mapToMailing = (data: MailingRows): MailingModel => {
   const { nome, cpf, cnpj, email, endereco, numero, cep, cidade, complemento, pais, bairro, estado } = data
   const mailing: MailingModel = {
@@ -30,4 +32,12 @@ export const mapToMailingPhones = (data: MailingRows): string[] => {
     phones.push(phone)
   }
   return phones
+}
+
+export const removeUploadCsvFile = (path: string): void => {
+  try {
+    unlinkSync(path)
+  } catch (error) {
+    console.error(error)
+  }
 }
