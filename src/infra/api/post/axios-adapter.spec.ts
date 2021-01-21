@@ -26,16 +26,14 @@ describe('Mailing Rest API', () => {
           name: 'any_name',
           cpf: 'any_cpf',
           email: 'any_email@mail.com',
-          address: {
-            cep: 'any_cep',
-            city: 'any_city',
-            complement: 'any_complement',
-            country: 'any_country',
-            neighborhood: 'any_neighborhood',
-            number: 123,
-            state: 'any_state',
-            street: 'any_street'
-          },
+          zipCode: 'any_cep',
+          city: 'any_city',
+          complement: 'any_complement',
+          country: 'any_country',
+          neighborhood: 'any_neighborhood',
+          number: 123,
+          state: 'any_state',
+          street: 'any_street',
           phones: ['any_phone']
         }
       ]
@@ -63,16 +61,14 @@ describe('Mailing Rest API', () => {
           name: 'any_name',
           cpf: 'any_cpf',
           email: 'any_email@mail.com',
-          address: {
-            cep: 'any_cep',
-            city: 'any_city',
-            complement: 'any_complement',
-            country: 'any_country',
-            neighborhood: 'any_neighborhood',
-            number: 123,
-            state: 'any_state',
-            street: 'any_street'
-          },
+          zipCode: 'any_cep',
+          city: 'any_city',
+          complement: 'any_complement',
+          country: 'any_country',
+          neighborhood: 'any_neighborhood',
+          number: 123,
+          state: 'any_state',
+          street: 'any_street',
           phones: ['any_phone']
         }
       ]

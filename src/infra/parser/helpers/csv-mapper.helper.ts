@@ -9,16 +9,14 @@ export const mapToMailing = (data: MailingRows): MailingModel => {
     cpf,
     cnpj,
     email,
-    address: {
-      street: endereco,
-      number: numero,
-      cep,
-      city: cidade,
-      complement: complemento,
-      country: pais,
-      neighborhood: bairro,
-      state: estado
-    },
+    street: endereco,
+    number: numero,
+    zipCode: cep,
+    city: cidade,
+    complement: complemento,
+    country: pais,
+    neighborhood: bairro,
+    state: estado,
     phones: mapToMailingPhones(data)
   }
   return mailing
