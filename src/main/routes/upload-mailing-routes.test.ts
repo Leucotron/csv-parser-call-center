@@ -1,6 +1,7 @@
 import request from 'supertest'
 import app from '../config/app'
 import { sync } from 'fast-glob'
+import env from '../config/env'
 
 describe('Upload Mailing Middleware', () => {
   test('Should return an mailing on success', async () => {
@@ -11,7 +12,7 @@ describe('Upload Mailing Middleware', () => {
       telefone2: 'celular'
     }
     await request(app)
-      .post('/api/v1/upload')
+      .post(`${env.context}/api/v1/upload`)
       .type('multipart/form-data')
       .field('delimiter', ',')
       .field('header', JSON.stringify(header))

@@ -1,4 +1,13 @@
+import { config } from 'dotenv'
+
+const { NODE_ENV } = process.env
+
+config({
+  path: NODE_ENV === 'production' ? '.env' : NODE_ENV === 'test' ? '.env.test' : '.env.development'
+})
+console.log(process.env.DIALER_HOST)
 export default {
   port: process.env.PORT || 9015,
-  dialerAPI: process.env.IS_PROD === 'true' ? 'http://localhost:9011/call-center-dialer/api/v1' : 'http://192.168.8.30:9011/call-center-dialer/api/v1'
+  dialerAPI: `${process.env.DIALER_HOST}/call-center-dialer/api/v1`,
+  context: process.env.CONTEXT
 }
