@@ -2,9 +2,10 @@
   "name": "mailing_parser",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "src/main/server.ts",
   "scripts": {
     "start": "cross-env NODE_ENV=development sucrase-node src/main/server.ts",
+    "start:prod": "cross-env NODE_ENV=production node dist/main/server.js",
     "test": "cross-env NODE_ENV=test jest --passWithNoTests --silent --noStackTrace --runInBand",
     "test:ci": "npm test -- --coverage",
     "test:integration": "npm test -- --watch -c jest-integration.config.js",

@@ -1,0 +1,14 @@
+apps:
+  - script: 'npm'
+    name: 'csv-parser'
+    args: ['run', 'start:prod']
+    watch: true
+    listen_timeout: 15000
+    time: true
+    wait_ready: true
+    exp_backoff_restart_delay: 100
+    max_memory_restart: '100M'
+    env:
+      NODE_ENV: production
+    env_development:
+      NODE_ENV: development
