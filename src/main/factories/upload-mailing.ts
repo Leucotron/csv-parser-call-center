@@ -5,7 +5,7 @@ import { FastCSVAdapter } from '../../infra/parser/fast-csv-adapter'
 import env from '../config/env'
 
 export const makeUploadMailingController = (): UploadMailingController => {
-  const url = env.dialerAPI
+  const url = `${env.dialerAPI}/mailing`
   const fastCsvAdapter = new FastCSVAdapter()
   const axiosAdapter = new AxiosAdapter()
   const restAddMailing = new RestAddMailing(fastCsvAdapter, axiosAdapter, url)
