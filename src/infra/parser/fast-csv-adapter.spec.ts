@@ -1,5 +1,5 @@
 import { FastCSVAdapter } from './fast-csv-adapter'
-import fc from 'fast-csv'
+import fc, { ParserOptionsArgs } from 'fast-csv'
 import EventEmitter from 'events'
 import { MailingRows } from './contracts/mailing-rows'
 import { MailingModel } from '../../domain/models/mailing'
@@ -37,7 +37,11 @@ jest.mock('fast-csv', () => ({
 
 describe('Fast CSV Adapter', () => {
   const makeSut = (): FastCSVAdapter => {
-    return new FastCSVAdapter()
+    const opts: ParserOptionsArgs = {
+      discardUnmappedColumns: true,
+      renameHeaders: true
+    }
+    return new FastCSVAdapter(opts)
   }
 
   test('Should calls parse with correct values', async () => {
@@ -55,12 +59,13 @@ describe('Fast CSV Adapter', () => {
   test('Should calls fast-csv with correct values', async () => {
     const sut = makeSut()
     const parseFileSpy = jest.spyOn(fc, 'parseFile')
-    await sut.parse('any_path', { delimiter: 'any_delimiter', headers: ['any_header'], renameHeaders: true })
+    await sut.parse('any_path', { delimiter: 'any_delimiter', headers: ['any_header'] })
     expect(parseFileSpy).toHaveBeenCalledWith('any_path',
       {
         delimiter: 'any_delimiter',
         headers: ['any_header'],
-        renameHeaders: true
+        renameHeaders: true,
+        discardUnmappedColumns: true
       }
     )
   })

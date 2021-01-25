@@ -6,7 +6,11 @@ import env from '../config/env'
 
 export const makeUploadMailingController = (): UploadMailingController => {
   const url = `${env.dialerAPI}/mailing`
-  const fastCsvAdapter = new FastCSVAdapter()
+  const opts = {
+    discardUnmappedColumns: true,
+    renameHeaders: true
+  }
+  const fastCsvAdapter = new FastCSVAdapter(opts)
   const axiosAdapter = new AxiosAdapter()
   const restAddMailing = new RestAddMailing(fastCsvAdapter, axiosAdapter, url)
   return new UploadMailingController(restAddMailing)
