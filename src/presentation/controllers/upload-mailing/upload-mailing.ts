@@ -15,8 +15,7 @@ export class UploadMailingController implements Controller {
       const mailings = await this.addMailing.add({ campaignId, headers: JSON.parse(header), delimiter, path: file.path })
       return created<MailingModel[]>(mailings)
     } catch (error) {
-      console.error(error)
-      return serverError()
+      return serverError(error)
     }
   }
 }

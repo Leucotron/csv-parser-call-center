@@ -111,7 +111,9 @@ describe('Upload Mailing Controller', () => {
   test('Should return an 500 if csvParser throws', async () => {
     const { sut, addMailingStub } = makeSut()
     jest.spyOn(addMailingStub, 'add').mockImplementation(async (): Promise<MailingModel[]> => {
-      throw new ServerError()
+      const error = new Error()
+      error.stack = 'any_stack'
+      throw error
     })
     const httpRequest = {
       body: {
@@ -125,9 +127,11 @@ describe('Upload Mailing Controller', () => {
         path: 'valid_path'
       }
     }
+    const error = new Error()
+    error.stack = 'any_stack'
     const httpResponse = await sut.handle(httpRequest)
     expect(httpResponse.statusCode).toBe(500)
-    expect(httpResponse.body).toEqual(new ServerError())
+    expect(httpResponse.body).toEqual(new ServerError(error))
   })
 
   test('Should calls AddMailing with correct params', async () => {
